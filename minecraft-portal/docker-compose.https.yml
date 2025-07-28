@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:14
+    container_name: minecraft-portal-db
+    environment:
+      POSTGRES_DB: portal
+      POSTGRES_USER: portal
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portal"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - minecraft_network
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: minecraft-portal-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://portal:secret@db:5432/portal
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=portal
+      - DB_PASSWORD=secret
+      - DB_NAME=portal
+      - JWT_SECRET=your-jwt-secret-key-change-in-production
+      - NODE_ENV=production
+      - PORT=3000
+      - HTTPS_ONLY=true
+      - SECURE_COOKIES=true
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - minecraft_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: minecraft-portal-nginx
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    networks:
+      - minecraft_network
+
+networks:
+  minecraft_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
