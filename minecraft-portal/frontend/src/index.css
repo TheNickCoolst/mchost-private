@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply h-full;
+  }
+
+  body {
+    @apply h-full bg-gray-900 text-white font-sans;
+  }
+
+  #root {
+    @apply h-full;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-success {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 hover:border-gray-500;
+  }
+
+  .input-field-large {
+    @apply input-field text-lg py-3 px-4 font-medium;
+  }
+
+  .card {
+    @apply bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 hover:border-gray-600 transition-all duration-200;
+  }
+
+  .status-running {
+    @apply text-green-400 bg-green-400/10 border border-green-400/20;
+  }
+
+  .status-stopped {
+    @apply text-red-400 bg-red-400/10 border border-red-400/20;
+  }
+
+  .status-starting {
+    @apply text-yellow-400 bg-yellow-400/10 border border-yellow-400/20;
+  }
+
+  .status-stopping {
+    @apply text-orange-400 bg-orange-400/10 border border-orange-400/20;
+  }
+
+  .status-error {
+    @apply text-red-500 bg-red-500/10 border border-red-500/20;
+  }
+
+  .console-log {
+    @apply font-mono text-sm bg-black p-4 rounded-lg h-96 overflow-y-auto;
+  }
+
+  .minecraft-button {
+    @apply bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 border-2 border-green-400 hover:border-green-300;
+  }
+
+  .player-count-card {
+    @apply p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer hover:shadow-lg transform hover:scale-105;
+  }
+
+  .player-count-card.selected {
+    @apply border-green-500 bg-gradient-to-br from-green-500/10 to-green-600/5 shadow-lg shadow-green-500/20;
+  }
+
+  .player-count-card:not(.selected) {
+    @apply border-gray-600 bg-gray-800 hover:border-gray-500 hover:bg-gray-700;
+  }
+
+  .minecraft-card {
+    @apply bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg shadow-lg p-6 border border-gray-700 hover:border-green-500/30 transition-all duration-300;
+  }
+
+  .server-type-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800;
+  }
+
+  .crafthost-gradient {
+    @apply bg-gradient-to-br from-green-600 via-green-500 to-emerald-600;
+  }
+
+  .crafthost-bg {
+    @apply bg-gradient-to-br from-gray-900 via-gray-800 to-green-900/20;
+  }
+
+  .premium-badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg;
+  }
+
+  .hosting-card {
+    @apply bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl shadow-xl p-6 border border-gray-600/50 hover:border-green-500/40 transition-all duration-300 backdrop-blur-sm;
+  }
+
+  .stats-card {
+    @apply bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-6 border border-gray-600/30 hover:border-green-500/30 transition-all duration-300 shadow-lg hover:shadow-xl;
+  }
+
+  .pro-button {
+    @apply bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 border border-green-400/30;
+  }
+}
