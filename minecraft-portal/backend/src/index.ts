@@ -10,6 +10,8 @@ import path from 'path';
 import { AppDataSource } from './config/database';
 import { cacheService } from './services/CacheService';
 import { emailService } from './services/EmailService';
+import { healthCheckService } from './services/HealthCheckService';
+import { errorHandler, errorLogger, notFoundHandler, handleUnhandledRejection, handleUncaughtException } from './middleware/errorHandler';
 import authRoutes from './routes/auth';
 import serverRoutes from './routes/servers';
 import userRoutes from './routes/users';
@@ -21,6 +23,9 @@ import playerRoutes from './routes/players';
 import subscriptionRoutes from './routes/subscriptions';
 import filesRoutes from './routes/files';
 import templatesRoutes from './routes/templates';
+import notificationsRoutes from './routes/notifications';
+import webhooksRoutes from './routes/webhooks';
+import healthRoutes from './routes/health';
 
 const app = express();
 const httpServer = createServer(app);
@@ -42,8 +47,29 @@ const io = new Server(httpServer, {
 
 const PORT = process.env.PORT || 3000;
 
+// Setup global error handlers
+handleUnhandledRejection();
+handleUncaughtException();
+
 // Trust proxy for nginx - only trust first proxy
 app.set('trust proxy', 1);
+
+// Request tracking middleware
+app.use((req, res, next) => {
+  const startTime = Date.now();
+  healthCheckService.recordRequest();
+
+  res.on('finish', () => {
+    const responseTime = Date.now() - startTime;
+    healthCheckService.recordResponseTime(responseTime);
+
+    if (res.statusCode >= 400) {
+      healthCheckService.recordError();
+    }
+  });
+
+  next();
+});
 
 // Custom key generator for rate limiting with proxy
 const getClientIp = (req: any) => {
@@ -126,6 +152,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Serve static files from frontend build
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
+// Health check routes (no rate limiting)
+app.use('/health', healthRoutes);
+app.use('/api/health', healthRoutes);
+
 // API routes with specific rate limits
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/servers', apiLimiter, serverRoutes);
@@ -138,22 +168,40 @@ app.use('/api/players', apiLimiter, playerRoutes);
 app.use('/api/subscriptions', apiLimiter, subscriptionRoutes);
 app.use('/api/files', apiLimiter, filesRoutes);
 app.use('/api/templates', apiLimiter, templatesRoutes);
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
+app.use('/api/notifications', apiLimiter, notificationsRoutes);
+app.use('/api/webhooks', apiLimiter, webhooksRoutes);
 
 // Serve frontend app for all non-API routes
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) {
-    res.status(404).json({ error: 'API endpoint not found' });
+    next(); // Let error handler handle 404
   } else {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
   }
 });
 
+// 404 handler for undefined API routes
+app.use('/api/*', notFoundHandler);
+
+// Error logging middleware
+app.use(errorLogger);
+
+// Error handler middleware (must be last)
+app.use(errorHandler);
+
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
+
+  // Join user-specific room for notifications
+  socket.on('join-user', (userId) => {
+    socket.join(`user-${userId}`);
+    console.log(`Client ${socket.id} joined user-${userId}`);
+  });
+
+  socket.on('leave-user', (userId) => {
+    socket.leave(`user-${userId}`);
+    console.log(`Client ${socket.id} left user-${userId}`);
+  });
 
   socket.on('join-server', (serverId) => {
     socket.join(`server-${serverId}`);
