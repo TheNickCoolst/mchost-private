@@ -1,13 +1,17 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { 
-  LogOut, 
-  Server, 
-  Users, 
-  Home, 
-  User
+import {
+  LogOut,
+  Server,
+  Users,
+  Home,
+  User,
+  HelpCircle,
+  Package
 } from 'lucide-react'
+import ModeSwitcher from './ModeSwitcher'
+import ThemeToggle from './ThemeToggle'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -20,6 +24,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
     { name: 'Servers', href: '/servers', icon: Server },
+    { name: 'Plugins', href: '/plugins', icon: Package },
+    { name: 'Help', href: '/help', icon: HelpCircle },
   ]
 
   if (user?.role === 'admin' || user?.role === 'moderator') {
@@ -70,15 +76,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Top bar */}
         <div className="sticky top-0 z-40 bg-gray-800 shadow-sm border-b border-gray-700">
           <div className="flex h-16 items-center justify-between px-6">
-            <div className="flex-1" />
-            
+            <div className="flex-1">
+              <ModeSwitcher />
+            </div>
+
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
+
               <div className="flex items-center space-x-2">
                 <User className="h-5 w-5 text-gray-400" />
                 <span className="text-sm text-gray-300">{user?.username}</span>
                 <span className="text-xs text-gray-500 capitalize">({user?.role})</span>
               </div>
-              
+
               <button
                 onClick={logout}
                 className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
