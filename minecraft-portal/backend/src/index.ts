@@ -37,6 +37,9 @@ const io = new Server(httpServer, {
 
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy for nginx
+app.set('trust proxy', true);
+
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 1000, // limit each IP to 1000 requests per windowMs

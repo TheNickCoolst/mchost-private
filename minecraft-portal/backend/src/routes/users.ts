@@ -40,7 +40,7 @@ router.post('/', requireRole(['admin']), async (req: AuthenticatedRequest, res) 
       return res.status(409).json({ error: 'User with this email or username already exists' });
     }
 
-    const passwordHash = await bcrypt.hash(password, 12);
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const user = userRepository.create({
       username,

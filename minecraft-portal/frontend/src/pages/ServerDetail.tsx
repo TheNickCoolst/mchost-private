@@ -8,7 +8,7 @@ import ServerConsole from '../components/ServerConsole'
 import ServerStats from '../components/ServerStats'
 import ServerPropertiesEditor from '../components/ServerPropertiesEditor'
 import PlayerManagement from '../components/PlayerManagement'
-import WorldManagement from '../components/WorldManagement'
+import { WorldManagement } from '../components/WorldManagement'
 import {
   Play,
   Square,
