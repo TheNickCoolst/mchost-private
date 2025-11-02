@@ -8,6 +8,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import { AppDataSource } from './config/database';
+import { cacheService } from './services/CacheService';
+import { emailService } from './services/EmailService';
 import authRoutes from './routes/auth';
 import serverRoutes from './routes/servers';
 import userRoutes from './routes/users';
@@ -17,6 +19,8 @@ import configRoutes from './routes/config';
 import worldRoutes from './routes/worlds';
 import playerRoutes from './routes/players';
 import subscriptionRoutes from './routes/subscriptions';
+import filesRoutes from './routes/files';
+import templatesRoutes from './routes/templates';
 
 const app = express();
 const httpServer = createServer(app);
@@ -132,6 +136,8 @@ app.use('/api/config', apiLimiter, configRoutes);
 app.use('/api/worlds', apiLimiter, worldRoutes);
 app.use('/api/players', apiLimiter, playerRoutes);
 app.use('/api/subscriptions', apiLimiter, subscriptionRoutes);
+app.use('/api/files', apiLimiter, filesRoutes);
+app.use('/api/templates', apiLimiter, templatesRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
@@ -165,8 +171,13 @@ io.on('connection', (socket) => {
 });
 
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
     console.log('Database connected successfully');
+
+    // Initialize services
+    await cacheService.initialize();
+    await emailService.initialize();
+
     const server = httpServer.listen(Number(PORT), '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });
@@ -174,13 +185,16 @@ AppDataSource.initialize()
     // Graceful shutdown handling
     const gracefulShutdown = async (signal: string) => {
       console.log(`Received ${signal}. Starting graceful shutdown...`);
-      
+
       server.close(() => {
         console.log('HTTP server closed');
-        
-        io.close(() => {
+
+        io.close(async () => {
           console.log('Socket.io server closed');
-          
+
+          // Close services
+          await cacheService.disconnect();
+
           AppDataSource.destroy().then(() => {
             console.log('Database connection closed');
             process.exit(0);
