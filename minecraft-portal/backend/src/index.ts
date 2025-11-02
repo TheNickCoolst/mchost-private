@@ -16,6 +16,7 @@ import pluginRoutes from './routes/plugins';
 import configRoutes from './routes/config';
 import worldRoutes from './routes/worlds';
 import playerRoutes from './routes/players';
+import subscriptionRoutes from './routes/subscriptions';
 
 const app = express();
 const httpServer = createServer(app);
@@ -37,8 +38,13 @@ const io = new Server(httpServer, {
 
 const PORT = process.env.PORT || 3000;
 
-// Trust proxy for nginx
-app.set('trust proxy', true);
+// Trust proxy for nginx - only trust first proxy
+app.set('trust proxy', 1);
+
+// Custom key generator for rate limiting with proxy
+const getClientIp = (req: any) => {
+  return req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+};
 
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -46,6 +52,8 @@ const generalLimiter = rateLimit({
   message: { error: 'Too many requests from this IP' },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: getClientIp,
+  skip: (req) => req.path === '/health',
 });
 
 // HTTPS enforcement middleware
@@ -58,18 +66,20 @@ const httpsOnly = (req: any, res: any, next: any) => {
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50, // limit each IP to 50 login attempts per windowMs
+  max: 100, // limit each IP to 100 login attempts per windowMs (increased)
   message: { error: 'Too many authentication attempts from this IP' },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: getClientIp,
 });
 
 const apiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 200, // limit each IP to 200 API requests per minute
+  max: 500, // limit each IP to 500 API requests per minute (increased)
   message: { error: 'Too many API requests from this IP' },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: getClientIp,
 });
 
 app.use(helmet({
@@ -99,9 +109,9 @@ app.use(compression({
 }));
 
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
+  origin: process.env.NODE_ENV === 'production'
     ? ['https://localhost', 'https://your-domain.com']
-    : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:4000', 'http://31.220.85.204:3001', 'https://localhost'],
+    : true, // Allow all origins in development
   credentials: true
 }));
 app.use(generalLimiter);
@@ -121,6 +131,7 @@ app.use('/api/plugins', apiLimiter, pluginRoutes);
 app.use('/api/config', apiLimiter, configRoutes);
 app.use('/api/worlds', apiLimiter, worldRoutes);
 app.use('/api/players', apiLimiter, playerRoutes);
+app.use('/api/subscriptions', apiLimiter, subscriptionRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });

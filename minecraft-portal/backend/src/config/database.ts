@@ -5,6 +5,8 @@ import { LogEntry } from '../models/LogEntry';
 import { MinecraftVersion } from '../models/MinecraftVersion';
 import { ServerType } from '../models/ServerType';
 import { Plugin } from '../models/Plugin';
+import { Subscription } from '../models/Subscription';
+import { SubscriptionPlan } from '../models/SubscriptionPlan';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -13,9 +15,9 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'portal',
   password: process.env.DB_PASSWORD || 'secret',
   database: process.env.DB_NAME || 'portal',
-  synchronize: process.env.NODE_ENV !== 'production', // Only auto-create tables in dev
+  synchronize: true, // Auto-sync schema changes
   logging: process.env.NODE_ENV === 'development',
-  entities: [User, ServerInstance, LogEntry, MinecraftVersion, ServerType, Plugin],
+  entities: [User, ServerInstance, LogEntry, MinecraftVersion, ServerType, Plugin, Subscription, SubscriptionPlan],
   // Connection pooling for better performance
   extra: {
     connectionLimit: 20,

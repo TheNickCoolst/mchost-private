@@ -2,8 +2,8 @@ import axios, { AxiosError } from 'axios'
 import { User, LoginRequest, RegisterRequest, AuthResponse, RefreshRequest, RefreshResponse } from '../types/auth'
 import { ServerInstance, CreateServerRequest, UpdateServerRequest, ServerActionRequest, LogEntry } from '../types/server'
 
-// Backend runs on port 3000, frontend on 3001
-const API_BASE_URL = 'http://31.220.85.204:3000'
+// Use relative URL to leverage nginx proxy
+const API_BASE_URL = ''
 
 // Helper function for exponential backoff retry
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
