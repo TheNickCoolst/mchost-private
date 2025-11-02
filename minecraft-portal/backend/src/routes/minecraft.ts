@@ -65,7 +65,7 @@ router.get('/versions/compatible/:serverType', async (req, res) => {
     // Apply server type specific filtering
     if (serverType === 'forge') {
       // Forge might not be available for the newest versions immediately
-      versions = versions.filter(v => !['1.21.1', '1.21.0'].includes(v.versionId));
+      versions = versions.filter(v => !['1.21.4', '1.21.3'].includes(v.versionId));
     }
     
     res.json(versions.map(version => ({

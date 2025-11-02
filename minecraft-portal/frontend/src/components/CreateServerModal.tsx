@@ -293,22 +293,67 @@ const CreateServerModal: React.FC<CreateServerModalProps> = ({ isOpen, onClose, 
                         <option disabled>Loading versions...</option>
                       ) : (
                         <>
-                          <optgroup label="🌟 Recommended">
+                          <optgroup label="⭐ Recommended Version">
                             {availableVersions.filter(v => v.recommended).map((version) => (
                               <option key={version.id} value={version.id}>
                                 {version.name} - {version.description}
                               </option>
                             ))}
                           </optgroup>
-                          <optgroup label="📦 Latest Releases">
-                            {availableVersions.filter(v => v.type === 'release' && !v.recommended).map((version) => (
+                          <optgroup label="🎮 1.21.x - Tricky Trials">
+                            {availableVersions.filter(v => v.id.startsWith('1.21') && !v.recommended).map((version) => (
                               <option key={version.id} value={version.id}>
                                 {version.name} - {version.description}
                               </option>
                             ))}
                           </optgroup>
-                          <optgroup label="🕰️ Legacy Versions">
-                            {availableVersions.filter(v => v.type === 'legacy').map((version) => (
+                          <optgroup label="🌸 1.20.x - Trails & Tales">
+                            {availableVersions.filter(v => v.id.startsWith('1.20')).map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.name} - {version.description}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🌲 1.19.x - The Wild Update">
+                            {availableVersions.filter(v => v.id.startsWith('1.19')).map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.name} - {version.description}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="⛰️ 1.18.x - Caves & Cliffs II">
+                            {availableVersions.filter(v => v.id.startsWith('1.18')).map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.name} - {version.description}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🏔️ 1.17.x - Caves & Cliffs I">
+                            {availableVersions.filter(v => v.id.startsWith('1.17')).map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.name} - {version.description}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🔥 1.16.x - Nether Update">
+                            {availableVersions.filter(v => v.id.startsWith('1.16')).map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.name} - {version.description}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🕰️ Legacy Versions (1.15 and older)">
+                            {availableVersions.filter(v =>
+                              v.type === 'legacy' ||
+                              v.id.startsWith('1.15') ||
+                              v.id.startsWith('1.14') ||
+                              v.id.startsWith('1.13') ||
+                              v.id.startsWith('1.12') ||
+                              v.id.startsWith('1.11') ||
+                              v.id.startsWith('1.10') ||
+                              v.id.startsWith('1.9') ||
+                              v.id.startsWith('1.8')
+                            ).map((version) => (
                               <option key={version.id} value={version.id}>
                                 {version.name} - {version.description}
                               </option>
@@ -320,7 +365,7 @@ const CreateServerModal: React.FC<CreateServerModalProps> = ({ isOpen, onClose, 
                     <div className="flex items-center space-x-1 mt-1">
                       <Info className="h-3 w-3 text-blue-400" />
                       <p className="text-xs text-gray-500">
-                        Choose based on your needs: Latest for new features, Legacy for mods/plugins
+                        {availableVersions.length} versions available - Latest versions have newest features, legacy versions have more mods
                       </p>
                     </div>
                     {errors.gameVersion && (
