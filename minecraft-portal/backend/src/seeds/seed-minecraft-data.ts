@@ -3,13 +3,61 @@ import { MinecraftVersion, VersionType } from '../models/MinecraftVersion';
 import { ServerType, ModLoaderType } from '../models/ServerType';
 
 const minecraftVersions = [
-  // Latest Releases (1.21.x)
+  // Latest Releases (1.21.x - Tricky Trials)
+  {
+    versionId: '1.21.10',
+    name: '1.21.10',
+    type: VersionType.RELEASE,
+    recommended: true,
+    description: 'Latest stable release - Best compatibility',
+    releaseDate: new Date('2025-01-20')
+  },
+  {
+    versionId: '1.21.9',
+    name: '1.21.9',
+    type: VersionType.RELEASE,
+    recommended: false,
+    description: 'Bug fixes and performance improvements',
+    releaseDate: new Date('2025-01-15')
+  },
+  {
+    versionId: '1.21.8',
+    name: '1.21.8',
+    type: VersionType.RELEASE,
+    recommended: false,
+    description: 'Stability improvements',
+    releaseDate: new Date('2025-01-10')
+  },
+  {
+    versionId: '1.21.7',
+    name: '1.21.7',
+    type: VersionType.RELEASE,
+    recommended: false,
+    description: 'Bug fixes',
+    releaseDate: new Date('2025-01-05')
+  },
+  {
+    versionId: '1.21.6',
+    name: '1.21.6',
+    type: VersionType.RELEASE,
+    recommended: false,
+    description: 'Performance updates',
+    releaseDate: new Date('2024-12-20')
+  },
+  {
+    versionId: '1.21.5',
+    name: '1.21.5',
+    type: VersionType.RELEASE,
+    recommended: false,
+    description: 'Stability improvements',
+    releaseDate: new Date('2024-12-15')
+  },
   {
     versionId: '1.21.4',
     name: '1.21.4',
     type: VersionType.RELEASE,
-    recommended: true,
-    description: 'Latest stable release - Winter Drop',
+    recommended: false,
+    description: 'Winter Drop - Bug fixes',
     releaseDate: new Date('2024-12-04')
   },
   {
@@ -17,7 +65,7 @@ const minecraftVersions = [
     name: '1.21.3',
     type: VersionType.RELEASE,
     recommended: false,
-    description: 'Latest stable release with bug fixes',
+    description: 'Bug fixes and improvements',
     releaseDate: new Date('2024-10-23')
   },
   {
@@ -25,7 +73,7 @@ const minecraftVersions = [
     name: '1.21.2',
     type: VersionType.RELEASE,
     recommended: false,
-    description: 'Stable release with improvements',
+    description: 'Stable release',
     releaseDate: new Date('2024-10-23')
   },
   {
@@ -33,7 +81,7 @@ const minecraftVersions = [
     name: '1.21.1',
     type: VersionType.RELEASE,
     recommended: false,
-    description: 'Tricky Trials - Stable and widely supported',
+    description: 'Tricky Trials - Very stable',
     releaseDate: new Date('2024-08-08')
   },
   {
@@ -255,8 +303,40 @@ const minecraftVersions = [
     name: '1.14.4',
     type: VersionType.LEGACY,
     recommended: false,
-    description: 'Village & Pillage - Stable',
+    description: 'Village & Pillage - Most stable',
     releaseDate: new Date('2019-07-19')
+  },
+  {
+    versionId: '1.14.3',
+    name: '1.14.3',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Bug fixes',
+    releaseDate: new Date('2019-06-24')
+  },
+  {
+    versionId: '1.14.2',
+    name: '1.14.2',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Performance improvements',
+    releaseDate: new Date('2019-05-27')
+  },
+  {
+    versionId: '1.14.1',
+    name: '1.14.1',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Bug fixes',
+    releaseDate: new Date('2019-05-13')
+  },
+  {
+    versionId: '1.14',
+    name: '1.14.0',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Village & Pillage Update',
+    releaseDate: new Date('2019-04-23')
   },
 
   // 1.13.x Releases - Update Aquatic
@@ -265,8 +345,24 @@ const minecraftVersions = [
     name: '1.13.2',
     type: VersionType.LEGACY,
     recommended: false,
-    description: 'Update Aquatic - Stable',
+    description: 'Update Aquatic - Most stable',
     releaseDate: new Date('2018-10-22')
+  },
+  {
+    versionId: '1.13.1',
+    name: '1.13.1',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Bug fixes',
+    releaseDate: new Date('2018-08-22')
+  },
+  {
+    versionId: '1.13',
+    name: '1.13.0',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Update Aquatic - Dolphins and underwater features',
+    releaseDate: new Date('2018-07-18')
   },
 
   // 1.12.x Releases - World of Color
@@ -277,6 +373,22 @@ const minecraftVersions = [
     recommended: false,
     description: 'Legendary mod ecosystem - Most popular legacy version',
     releaseDate: new Date('2017-09-18')
+  },
+  {
+    versionId: '1.12.1',
+    name: '1.12.1',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'Bug fixes',
+    releaseDate: new Date('2017-08-03')
+  },
+  {
+    versionId: '1.12',
+    name: '1.12.0',
+    type: VersionType.LEGACY,
+    recommended: false,
+    description: 'World of Color Update',
+    releaseDate: new Date('2017-06-07')
   },
 
   // 1.11.x Releases - Exploration Update

@@ -16,31 +16,67 @@ export interface ServerType {
 }
 
 export const MINECRAFT_VERSIONS: MinecraftVersion[] = [
-  // Latest Releases (1.21.x)
+  // Latest Releases (1.21.x - Tricky Trials)
+  {
+    id: '1.21.10',
+    name: '1.21.10',
+    type: 'release',
+    recommended: true,
+    description: 'Latest stable release - Best compatibility'
+  },
+  {
+    id: '1.21.9',
+    name: '1.21.9',
+    type: 'release',
+    description: 'Bug fixes and performance improvements'
+  },
+  {
+    id: '1.21.8',
+    name: '1.21.8',
+    type: 'release',
+    description: 'Stability improvements'
+  },
+  {
+    id: '1.21.7',
+    name: '1.21.7',
+    type: 'release',
+    description: 'Bug fixes'
+  },
+  {
+    id: '1.21.6',
+    name: '1.21.6',
+    type: 'release',
+    description: 'Performance updates'
+  },
+  {
+    id: '1.21.5',
+    name: '1.21.5',
+    type: 'release',
+    description: 'Stability improvements'
+  },
   {
     id: '1.21.4',
     name: '1.21.4',
     type: 'release',
-    recommended: true,
-    description: 'Latest stable release - Winter Drop'
+    description: 'Winter Drop - Bug fixes'
   },
   {
     id: '1.21.3',
     name: '1.21.3',
     type: 'release',
-    description: 'Latest stable release with bug fixes'
+    description: 'Bug fixes and improvements'
   },
   {
     id: '1.21.2',
     name: '1.21.2',
     type: 'release',
-    description: 'Stable release with improvements'
+    description: 'Stable release'
   },
   {
     id: '1.21.1',
     name: '1.21.1',
     type: 'release',
-    description: 'Tricky Trials - Stable and widely supported'
+    description: 'Tricky Trials - Very stable'
   },
   {
     id: '1.21',
@@ -210,7 +246,31 @@ export const MINECRAFT_VERSIONS: MinecraftVersion[] = [
     id: '1.14.4',
     name: '1.14.4',
     type: 'legacy',
-    description: 'Village & Pillage - Stable'
+    description: 'Village & Pillage - Most stable'
+  },
+  {
+    id: '1.14.3',
+    name: '1.14.3',
+    type: 'legacy',
+    description: 'Bug fixes'
+  },
+  {
+    id: '1.14.2',
+    name: '1.14.2',
+    type: 'legacy',
+    description: 'Performance improvements'
+  },
+  {
+    id: '1.14.1',
+    name: '1.14.1',
+    type: 'legacy',
+    description: 'Bug fixes'
+  },
+  {
+    id: '1.14',
+    name: '1.14.0',
+    type: 'legacy',
+    description: 'Village & Pillage Update'
   },
 
   // 1.13.x Releases - Update Aquatic
@@ -218,7 +278,19 @@ export const MINECRAFT_VERSIONS: MinecraftVersion[] = [
     id: '1.13.2',
     name: '1.13.2',
     type: 'legacy',
-    description: 'Update Aquatic - Stable'
+    description: 'Update Aquatic - Most stable'
+  },
+  {
+    id: '1.13.1',
+    name: '1.13.1',
+    type: 'legacy',
+    description: 'Bug fixes'
+  },
+  {
+    id: '1.13',
+    name: '1.13.0',
+    type: 'legacy',
+    description: 'Update Aquatic - Dolphins and underwater features'
   },
 
   // 1.12.x Releases - World of Color
@@ -227,6 +299,18 @@ export const MINECRAFT_VERSIONS: MinecraftVersion[] = [
     name: '1.12.2',
     type: 'legacy',
     description: 'Legendary mod ecosystem - Most popular legacy version'
+  },
+  {
+    id: '1.12.1',
+    name: '1.12.1',
+    type: 'legacy',
+    description: 'Bug fixes'
+  },
+  {
+    id: '1.12',
+    name: '1.12.0',
+    type: 'legacy',
+    description: 'World of Color Update'
   },
 
   // 1.11.x Releases - Exploration Update
