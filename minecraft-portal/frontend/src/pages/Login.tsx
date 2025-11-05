@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Loader2 } from 'lucide-react'
+import { Loader2, AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import axios from 'axios'
 
 const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -11,7 +12,24 @@ const Login: React.FC = () => {
     password: '',
   })
   const [loading, setLoading] = useState(false)
+  const [setupRequired, setSetupRequired] = useState<boolean | null>(null)
   const { login, register } = useAuth()
+
+  // Check if initial setup is required
+  useEffect(() => {
+    const checkSetupStatus = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/auth/setup-status`)
+        setSetupRequired(response.data.setupRequired)
+        if (response.data.setupRequired) {
+          setIsLogin(false) // Switch to registration mode
+        }
+      } catch (error) {
+        console.error('Setup status check failed:', error)
+      }
+    }
+    checkSetupStatus()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,28 +64,54 @@ const Login: React.FC = () => {
 
         {/* Form Card */}
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-gray-700">
-          <div className="flex mb-6 bg-gray-700/50 rounded-lg p-1">
-            <button
-              onClick={() => setIsLogin(true)}
-              className={`flex-1 py-2 rounded-md transition-all ${
-                isLogin
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg'
-                  : 'text-gray-400'
-              }`}
-            >
-              Anmelden
-            </button>
-            <button
-              onClick={() => setIsLogin(false)}
-              className={`flex-1 py-2 rounded-md transition-all ${
-                !isLogin
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'text-gray-400'
-              }`}
-            >
-              Registrieren
-            </button>
-          </div>
+          {/* Initial Setup Notice */}
+          {setupRequired && (
+            <div className="mb-6 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/50 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="h-5 w-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold mb-1">🚀 Erstmaliges Setup</h3>
+                  <p className="text-gray-300 text-sm">
+                    Erstelle deinen Admin-Account um das System zu initialisieren.
+                    Der erste Benutzer erhält automatisch Administrator-Rechte.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tab Switcher - Hide when setup is required */}
+          {!setupRequired && (
+            <div className="flex mb-6 bg-gray-700/50 rounded-lg p-1">
+              <button
+                onClick={() => setIsLogin(true)}
+                className={`flex-1 py-2 rounded-md transition-all ${
+                  isLogin
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg'
+                    : 'text-gray-400'
+                }`}
+              >
+                Anmelden
+              </button>
+              <button
+                onClick={() => setIsLogin(false)}
+                className={`flex-1 py-2 rounded-md transition-all ${
+                  !isLogin
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                    : 'text-gray-400'
+                }`}
+              >
+                Registrieren
+              </button>
+            </div>
+          )}
+
+          {/* Setup Mode Title */}
+          {setupRequired && (
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">
+              Admin-Account erstellen
+            </h2>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -84,7 +128,7 @@ const Login: React.FC = () => {
               />
             </div>
 
-            {!isLogin && (
+            {(!isLogin || setupRequired) && (
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   E-Mail
@@ -95,7 +139,7 @@ const Login: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                   placeholder="deine@email.de"
-                  required={!isLogin}
+                  required={!isLogin || setupRequired}
                 />
               </div>
             )}
@@ -118,7 +162,7 @@ const Login: React.FC = () => {
               type="submit"
               disabled={loading}
               className={`w-full py-3 rounded-lg font-semibold text-white transition-all shadow-lg ${
-                isLogin
+                (isLogin && !setupRequired)
                   ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
                   : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
               } disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2`}
@@ -129,7 +173,12 @@ const Login: React.FC = () => {
                   <span>Laden...</span>
                 </>
               ) : (
-                <span>{isLogin ? '🎮 Anmelden' : '🚀 Account erstellen'}</span>
+                <span>
+                  {setupRequired
+                    ? '👑 Admin-Account erstellen'
+                    : (isLogin ? '🎮 Anmelden' : '🚀 Account erstellen')
+                  }
+                </span>
               )}
             </button>
           </form>
