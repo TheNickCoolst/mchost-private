@@ -1,16 +1,78 @@
-# Minecraft Hosting Platform
+# 🎮 CraftHost Pro - Minecraft Hosting Platform
 
-Private repository for the Minecraft server hosting management platform.
+Eine vollständige Web-basierte Lösung für Minecraft Server Management.
 
-This project provides a complete web-based solution for managing Minecraft servers with Wings daemon integration.
+## ⚡ 1-Click Installation
 
-## Project Structure
+```bash
+./install.sh
+```
 
-- `minecraft-portal/` - Main project directory containing the complete application
-- Backend: Node.js/TypeScript with Express
-- Frontend: React/TypeScript with Vite
-- Database: PostgreSQL
-- Monitoring: Prometheus & Grafana
-- Containerization: Docker & Docker Compose
+**Das war's!** 🎉
 
-Files are being uploaded systematically to preserve the complete project structure.
+Nach der Installation:
+1. Öffne http://localhost in deinem Browser
+2. Erstelle deinen Admin-Account (der erste Benutzer wird automatisch Admin)
+3. Fertig!
+
+## 📋 Voraussetzungen
+
+- Docker
+- Docker Compose
+
+## 🏗️ Projekt-Struktur
+
+```
+minecraft-portal/
+├── backend/          # Node.js/TypeScript API
+├── frontend/         # React/TypeScript UI
+└── docker-compose.yml
+```
+
+## 🔧 Technologie-Stack
+
+- **Backend**: Node.js, Express, TypeORM, PostgreSQL
+- **Frontend**: React, TypeScript, Vite, TailwindCSS
+- **Datenbank**: PostgreSQL
+- **Container**: Docker & Docker Compose
+
+## 📝 Manuelle Verwaltung
+
+```bash
+cd minecraft-portal
+
+# Services starten
+docker-compose up -d
+
+# Logs anzeigen
+docker-compose logs -f
+
+# Services stoppen
+docker-compose down
+
+# Neustart
+docker-compose restart
+```
+
+## 🎯 Features
+
+- ✅ Erstmaliges Setup mit Admin-Registrierung (Pterodactyl-Style)
+- ✅ Benutzer- und Rollen-Management
+- ✅ Server-Verwaltung
+- ✅ Automatische Datenbank-Migration
+- ✅ Moderne React UI mit TailwindCSS
+- ✅ JWT Authentication
+- ✅ Docker-basierte Bereitstellung
+
+## 📊 Standard-Ports
+
+- Frontend: `http://localhost:80`
+- Backend: `http://localhost:3001`
+- PostgreSQL: `localhost:5432`
+
+## 🔐 Sicherheit
+
+- Passwörter werden mit bcrypt gehasht
+- JWT für sichere Authentication
+- First-User wird automatisch Admin
+- Weitere Registrierungen sind nach dem ersten Setup deaktiviert
